@@ -27,7 +27,7 @@ sh tpch_prepare_data.sh
 echo "Done."
 
 # bechmark envs
-$HAOOP_HOME/bin/hadoop version | tee -a $RESULT_FILE
+${HAOOP_HOME}/bin/hadoop version | tee -a $RESULT_FILE
 echo "-- Hadoop Configurations" | tee -a $RESULT_FILE
 echo "-- core-site.xml" | tee -a $RESULT_FILE
 cat ${HADOOP_HOME}/conf/core-site.xml | tee -a $RESULT_FILE
