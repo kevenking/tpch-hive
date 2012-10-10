@@ -1,1 +1,7 @@
 .project
+*.o
+*.tbl
+metastore_db
+TempStatsStore
+benchmark.log*
+result-tpch-hive.txt*

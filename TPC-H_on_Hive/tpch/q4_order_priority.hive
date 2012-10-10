@@ -1,7 +1,7 @@
-DROP TABLE orders;
-DROP TABLE lineitem;
-DROP TABLE q4_order_priority_tmp;
-DROP TABLE q4_order_priority;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS lineitem;
+DROP TABLE IF EXISTS q4_order_priority_tmp;
+DROP TABLE IF EXISTS q4_order_priority;
 
 -- create tables and load data
 create external table orders (O_ORDERKEY INT, O_CUSTKEY INT, O_ORDERSTATUS STRING, O_TOTALPRICE DOUBLE, O_ORDERDATE STRING, O_ORDERPRIORITY STRING, O_CLERK STRING, O_SHIPPRIORITY INT, O_COMMENT STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' STORED AS TEXTFILE LOCATION '/tpch/orders';
@@ -14,12 +14,9 @@ CREATE TABLE q4_order_priority (O_ORDERPRIORITY STRING, ORDER_COUNT INT);
 set mapred.min.split.size=536870912;
 -- the query
 INSERT OVERWRITE TABLE q4_order_priority_tmp 
-select 
-  DISTINCT l_orderkey 
-from 
-  lineitem 
-where 
-  l_commitdate < l_receiptdate;
+select DISTINCT l_orderkey from lineitem 
+where l_commitdate < l_receiptdate;
+  
 INSERT OVERWRITE TABLE q4_order_priority 
 select o_orderpriority, count(1) as order_count 
 from 

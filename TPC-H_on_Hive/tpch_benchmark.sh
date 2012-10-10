@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # set up configurations
-source benchmark.conf;
+source ./benchmark.conf;
 
 if [ -e "$LOG_FILE" ]; then
 	timestamp=`date "+%F-%R" --reference=$LOG_FILE`
@@ -11,7 +11,7 @@ fi
 
 echo ""
 echo "***********************************************"
-echo "*           PC-H benchmark on Hive            *"
+echo "*          TPC-H benchmark on Hive            *"
 echo "***********************************************"
 echo "                                               " 
 echo "Running Hive from $HIVE_HOME" | tee -a $LOG_FILE
@@ -25,6 +25,7 @@ while [ $trial -lt $NUM_OF_TRIALS ]; do
 	echo "Executing Trial #$trial of $NUM_OF_TRIALS trial(s)..."
 
 	for query in ${HIVE_TPCH_QUERIES_ALL[@]}; do
+		echo ""
 		echo "Running Hive query: $query" | tee -a $LOG_FILE
 		$TIME_CMD $HIVE_CMD -f $BASE_DIR/$query 2>&1 | tee -a $LOG_FILE | grep '^Time:'
                 returncode=${PIPESTATUS[0]}
