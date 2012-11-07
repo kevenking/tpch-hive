@@ -26,8 +26,12 @@ cd ${_DIR}/TPC-H_on_Hive/data/
 sh tpch_prepare_data.sh
 echo "Done."
 
-# bechmark envs
-${HAOOP_HOME}/bin/hadoop version | tee -a $RESULT_FILE
+if [ -e "$RESULT_FILE" ]; then
+    ts=`date "+%F-%R" --reference=$RESULT_FILE`
+    backup="$RESULT_FILE.$timestamp"
+    mv $RESULT_FILE $backup
+fi
+
 echo "-- Hadoop Configurations" | tee -a $RESULT_FILE
 echo "-- core-site.xml" | tee -a $RESULT_FILE
 cat ${HADOOP_HOME}/conf/core-site.xml | tee -a $RESULT_FILE
@@ -40,11 +44,5 @@ cat ${HIVE_HOME}/conf/hive-site.xml | tee -a $RESULT_FILE
 echo ""
 
 cd ${_DIR}/TPC-H_on_Hive/
-
-if [ -e "$RESULT_FILE" ]; then
-    ts=`date "+%F-%R" --reference=$RESULT_FILE`
-    backup="$RESULT_FILE.$timestamp"
-    mv $RESULT_FILE $backup
-fi
 
 sh tpch_benchmark.sh | tee -a $RESULT_FILE
